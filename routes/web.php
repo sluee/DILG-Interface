@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\IssuanceController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +30,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/latest', [IssuanceController::class, 'index']);
+
+    // Route for UserController
+    Route::get('/users', [UserController::class,'index'])->name('user.index');
+    Route::get('/users/create', [UserController::class,'create'])->name('user.create');
+    Route::post('/users/create', [UserController::class,'store'])->name('user.store');
+    Route::get('/users/show/{user}', [UserController::class,'show'])->name('user.show');
+    Route::put('/users/activate/{user}', [UserController::class, 'activate'])->name('user.activate');
+    Route::put('/users/deactivate/{user}', [UserController::class, 'deactivate'])->name('user.deactivate');
+
+
 });
 
 require __DIR__.'/auth.php';
