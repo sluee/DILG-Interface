@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -52,6 +53,8 @@ class UserController extends Controller
         // $user->assignRole($data['role']);
         // Assign roles to the user
 
+        $log_entry = Auth::user()->name ." created a  user " . $user->name;
+        event(new UserLog($log_entry));
 
         return redirect('/users')->with('success', 'Account created successfully.');
     }
@@ -91,16 +94,20 @@ class UserController extends Controller
 
     public function deactivate(User $user){
         $user->update(['status' => 0]);
-        // $log_entry = Auth::user()->name ." updated a user status to deactivated  with the id# " . $user->id;
-        // event(new UserLog($log_entry));
+        $log_entry = Auth::user()->name ." updated  user " . $user->name .  " status to deactivate ";
+        event(new UserLog($log_entry));
 
         return redirect()->route('user.show', ['user' => $user->id])->with('success', 'User activated successfully');
     }
 
     public function activate(User $user){
         abort_if(!$user, 404); // Add this line to check if the user exists
-
         $user->update(['status' => 1]);
+
+        $log_entry = Auth::user()->name ." updated  user " . $user->name .  " status to activate ";
+        event(new UserLog($log_entry));
+
+
         return redirect()->route('user.show', ['user' => $user->id])->with('success', 'User activated successfully');
     }
 
