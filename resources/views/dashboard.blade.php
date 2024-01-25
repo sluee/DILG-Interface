@@ -28,7 +28,7 @@
 
             </div>
             <div class="flex-grow flex flex-col ml-4">
-                <span class="text-xl font-bold">8,430</span>
+                <span class="text-xl font-bold">{{$usersCount}}</span>
                 <div class="flex items-center justify-between">
                     <span class="text-gray-500">Total Users</span>
 

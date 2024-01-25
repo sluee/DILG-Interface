@@ -4,9 +4,15 @@
             <li class="px-5">
                 <div class="flex flex-row items-center h-6">
                     <div class="text-m font-light tracking-wide text-white">
+                        @if(Auth::user()->hasRole('admin'))
                         <p class="font-semibold tracking-wide text-m text-white leading-tight">
-
+                            Administrator
                         </p>
+                    @else
+                        <p class="font-semibold tracking-wide text-m text-white leading-tight">
+                            Standard
+                        </p>
+                    @endif
                     </div>
                 </div>
             </li>

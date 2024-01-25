@@ -1,12 +1,5 @@
 <x-app-layout>
-    {{-- <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create User') }}
-        </h2>
-    </x-slot> --}}
 
-    <!-- component -->
-<!-- Create by joker banny -->
 <div class=" flex justify-center items-center mt-8">
 	<div class="lg:w-2/5 md:w-1/2 w-2/3">
 		<form method="POST" action="{{ route('user.store') }}" class="bg-white p-10 rounded-lg shadow-lg min-w-full">
@@ -19,7 +12,7 @@
 			<div>
                 <label class="text-gray-800 font-semibold block my-3 text-md" for="role">Roles</label>
                 <select name="role" id="role"  class="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none ">
-                    <option value="" disabled>Select a Sow</option>
+                    <option >Select a Role</option>
                     @foreach($roles as $role)
                         <option value="{{ $role->name }}">{{ $role->name }}</option>
                     @endforeach
