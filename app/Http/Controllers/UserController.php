@@ -6,6 +6,7 @@ use App\Events\UserLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -15,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('roles')->get();
+        $users = User::with('roles')->paginate(6);
 
         return view('user.index', compact('users'));
     }
@@ -52,6 +53,9 @@ class UserController extends Controller
         $user->assignRole($role);
         // $user->assignRole($data['role']);
         // Assign roles to the user
+        $token = $user->createToken('Personal Access Token')->plainTextToken;
+        $response = ['user' => $user, 'token' => $token];
+        return response()->json($response, 200);
 
         $log_entry = Auth::user()->name ." created a  user " . $user->name;
         event(new UserLog($log_entry));
@@ -109,6 +113,27 @@ class UserController extends Controller
 
 
         return redirect()->route('user.show', ['user' => $user->id])->with('success', 'User activated successfully');
+    }
+
+    public function login(Request $request){
+
+        $rules =[
+            'email'     => 'required',
+            'password'  =>'required'
+        ];
+
+        $request->validate($rules);
+
+        $user = User::where('email', $request->email)->first();
+
+        if($user && Hash::check($request->password, $user->password)){
+            $token= $user->createToken('Personal Access Token')->plainTextToken;
+            $response =['user' => $user, 'token'=>$token];
+            return response()->json($response, 200);
+        }
+
+        $response =['message'=> 'Incorrect email or password'];
+        return response()->json($response, 400);
     }
 
 }
